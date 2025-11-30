@@ -19,7 +19,6 @@ async function init() {
     zoom: DEFAULT_ZOOM,
     mapTypeId: "satellite",
     streetViewControl: true
-    mapTypeControl: false
   });
 
   const points = await fetchPoints();
