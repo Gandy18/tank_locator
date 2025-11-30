@@ -1,13 +1,10 @@
-// Basic config: starting zoom and default center (UK midpoint as fallback)
 const DEFAULT_CENTER = { lat: 52.8, lng: -1.6 };
 const DEFAULT_ZOOM = 6;
 
-// Globals
 let map;
 let markers = [];
 let openInfoWindow = null;
 
-// Utility: create a custom heart icon (local asset)
 function heartIcon() {
   return {
     url: "assets/heart.png",
@@ -16,7 +13,6 @@ function heartIcon() {
   };
 }
 
-// Initialize the map and load data
 async function init() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: DEFAULT_CENTER,
@@ -34,7 +30,6 @@ async function init() {
   locateUser();
 }
 
-// Fetch JSON data
 async function fetchPoints() {
   try {
     const res = await fetch("data/delivery_points.json");
@@ -52,15 +47,14 @@ async function fetchPoints() {
   }
 }
 
-// Add markers with clustering
 function addMarkers(points) {
   markers.forEach(m => m.marker.setMap(null));
   markers = [];
-  const markerObjects = [];
 
   points.forEach(point => {
     const marker = new google.maps.Marker({
       position: { lat: point.latitude, lng: point.longitude },
+      map,
       title: point.dp_name || point.dp_number,
       icon: heartIcon()
     });
@@ -95,15 +89,10 @@ function addMarkers(points) {
       streetView.setVisible(true);
     });
 
-    markerObjects.push(marker);
     markers.push({ marker, infoWindow, point });
   });
-
-  // Correct clusterer call
-  new MarkerClusterer({ map, markers: markerObjects });
 }
 
-// Simple search by dp_number or dp_name
 function wireSearch(points) {
   const input = document.getElementById("searchInput");
   const btn = document.getElementById("searchBtn");
@@ -126,7 +115,6 @@ function wireSearch(points) {
   });
 }
 
-// Locate Me button (blue with white border, always visible)
 function wireLocateMe() {
   const btn = document.createElement("button");
   btn.textContent = "Locate Me";
@@ -145,7 +133,6 @@ function wireLocateMe() {
   });
 }
 
-// Centre on current location with ~30 mile radius
 function locateUser() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -187,5 +174,4 @@ function escapeHTML(str) {
     .replace(/>/g, "&gt;");
 }
 
-// Start the app once the page loads
 window.addEventListener("load", init);
