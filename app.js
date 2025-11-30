@@ -62,16 +62,15 @@ async function fetchPoints() {
   }
 }
 
-// Add markers with clustering
+// Add markers (no clustering)
 function addMarkers(points) {
   markers.forEach(m => m.marker.setMap(null));
   markers = [];
 
-  const markerObjects = [];
-
   points.forEach(point => {
     const marker = new google.maps.Marker({
       position: { lat: point.latitude, lng: point.longitude },
+      map,
       title: point.dp_name || point.dp_number,
       icon: heartIcon()
     });
@@ -107,12 +106,8 @@ function addMarkers(points) {
       streetView.setVisible(true);
     });
 
-    markerObjects.push(marker);
     markers.push({ marker, infoWindow, point });
   });
-
-  // Correct clusterer call
-  new MarkerClusterer({ map, markers: markerObjects });
 }
 
 // Simple search by dp_number or dp_name
@@ -204,4 +199,10 @@ function locateUser() {
       }
     );
   } else {
-    alert("Geolocation
+    alert("Geolocation not supported by this browser.");
+  }
+}
+
+// Navigation function (Google Maps link)
+function navigateTo(lat, lng) {
+  const url = `https://www.google.com/maps/dir/?api=1&
