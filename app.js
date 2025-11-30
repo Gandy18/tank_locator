@@ -111,8 +111,8 @@ function addMarkers(points) {
     markers.push({ marker, infoWindow, point });
   });
 
-  // Create the clusterer
-  new markerClusterer.MarkerClusterer({ map, markers: markerObjects });
+  // Correct clusterer call
+  new MarkerClusterer({ map, markers: markerObjects });
 }
 
 // Simple search by dp_number or dp_name
@@ -205,4 +205,3 @@ function locateUser() {
     );
   } else {
     alert("Geolocation
-          
