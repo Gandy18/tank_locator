@@ -1,76 +1,60 @@
-// Basic config: starting zoom and default center (UK midpoint as fallback)
 const DEFAULT_CENTER = { lat: 52.8, lng: -1.6 };
 const DEFAULT_ZOOM = 6;
 
-// Globals
 let map;
 let markers = [];
 let openInfoWindow = null;
 
-// Utility: create a custom heart icon (local asset)
 function heartIcon() {
   return {
     url: "assets/heart.png",
     scaledSize: new google.maps.Size(32, 32),
-    anchor: new google.maps.Point(16, 16) // center the icon nicely
+    anchor: new google.maps.Point(16, 16)
   };
 }
 
-// Initialize the map and load data
 async function init() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: DEFAULT_CENTER,
     zoom: DEFAULT_ZOOM,
-    mapTypeId: "satellite",   // satellite view
-    streetViewControl: true   // pegman enabled
+    mapTypeId: "satellite",
+    streetViewControl: true
   });
 
   const points = await fetchPoints();
-  if (!points || points.length === 0) {
-    console.warn("No delivery points found.");
-    return;
-  }
+  if (!points || points.length === 0) return;
 
   addMarkers(points);
-
   wireSearch(points);
   wireLocateMe();
-
-  // Try to centre on current location at startup
   locateUser();
 }
 
-// Fetch JSON data
 async function fetchPoints() {
   try {
     const res = await fetch("data/delivery_points.json");
     if (!res.ok) throw new Error("Failed to load data/delivery_points.json");
     const json = await res.json();
-
-    // Validate and normalize numbers
-    return json
-      .map(p => ({
-        dp_number: String(p.dp_number || "").trim(),
-        dp_name: String(p.dp_name || "").trim(),
-        latitude: Number(p.latitude),
-        longitude: Number(p.longitude)
-      }))
-      .filter(p => !isNaN(p.latitude) && !isNaN(p.longitude));
+    return json.map(p => ({
+      dp_number: String(p.dp_number || "").trim(),
+      dp_name: String(p.dp_name || "").trim(),
+      latitude: Number(p.latitude),
+      longitude: Number(p.longitude)
+    })).filter(p => !isNaN(p.latitude) && !isNaN(p.longitude));
   } catch (e) {
     console.error(e);
     return [];
   }
 }
 
-// Add markers (no clustering)
 function addMarkers(points) {
   markers.forEach(m => m.marker.setMap(null));
   markers = [];
+  const markerObjects = [];
 
   points.forEach(point => {
     const marker = new google.maps.Marker({
       position: { lat: point.latitude, lng: point.longitude },
-      map,
       title: point.dp_name || point.dp_number,
       icon: heartIcon()
     });
@@ -98,7 +82,6 @@ function addMarkers(points) {
       openInfoWindow = infoWindow;
     });
 
-    // Double‑click to open Street View directly
     marker.addListener("dblclick", () => {
       const streetView = map.getStreetView();
       streetView.setPosition({ lat: point.latitude, lng: point.longitude });
@@ -106,34 +89,29 @@ function addMarkers(points) {
       streetView.setVisible(true);
     });
 
+    markerObjects.push(marker);
     markers.push({ marker, infoWindow, point });
   });
+
+  // Correct clusterer call
+  new MarkerClusterer({ map, markers: markerObjects });
 }
 
-// Simple search by dp_number or dp_name
 function wireSearch(points) {
   const input = document.getElementById("searchInput");
   const btn = document.getElementById("searchBtn");
-
   btn.addEventListener("click", () => {
     const q = input.value.trim().toLowerCase();
     if (!q) return;
-
     const match = points.find(p =>
       (p.dp_number && p.dp_number.toLowerCase().includes(q)) ||
       (p.dp_name && p.dp_name.toLowerCase().includes(q))
     );
-
-    if (!match) {
-      alert("No matching delivery point found.");
-      return;
-    }
-
+    if (!match) { alert("No matching delivery point found."); return; }
     const m = markers.find(m => m.point.dp_number === match.dp_number);
     if (m) {
       map.panTo({ lat: match.latitude, lng: match.longitude });
       map.setZoom(16);
-
       if (openInfoWindow) openInfoWindow.close();
       m.infoWindow.open(map, m.marker);
       openInfoWindow = m.infoWindow;
@@ -141,7 +119,6 @@ function wireSearch(points) {
   });
 }
 
-// Locate Me button (blue with white border, always visible)
 function wireLocateMe() {
   const btn = document.createElement("button");
   btn.textContent = "Locate Me";
@@ -149,60 +126,40 @@ function wireLocateMe() {
     position:absolute; bottom:12px; left:12px; z-index:2;
     padding:8px 12px; border:2px solid #fff; border-radius:6px;
     background:#1a73e8; color:#fff; cursor:pointer; font-family:system-ui;
-    font-weight:bold;
-    box-shadow:0 2px 6px rgba(0,0,0,0.4);
+    font-weight:bold; box-shadow:0 2px 6px rgba(0,0,0,0.4);
     text-shadow:0 1px 2px rgba(0,0,0,0.6);
   `;
   document.body.appendChild(btn);
-
   btn.addEventListener("click", () => {
     const streetView = map.getStreetView();
-    if (streetView.getVisible()) {
-      // If Street View is active, reload to default view
-      location.reload();
-    } else {
-      // Otherwise, locate user
-      locateUser();
-    }
+    if (streetView.getVisible()) location.reload();
+    else locateUser();
   });
 }
 
-// Centre on current location with ~30 mile radius
 function locateUser() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       pos => {
         const loc = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
         const circle = new google.maps.Circle({
-          center: loc,
-          radius: 30 * 1609.34 // 30 miles in meters
+          center: loc, radius: 30 * 1609.34
         });
         map.fitBounds(circle.getBounds());
-
         new google.maps.Marker({
-          position: loc,
-          map,
+          position: loc, map,
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
-            scale: 6,
-            fillColor: "#00f",
-            fillOpacity: 0.8,
-            strokeColor: "#fff",
-            strokeWeight: 2
+            scale: 6, fillColor: "#00f", fillOpacity: 0.8,
+            strokeColor: "#fff", strokeWeight: 2
           },
           title: "Your Location"
         });
       },
-      err => {
-        console.warn("Geolocation failed:", err);
-        alert("Unable to get your location.");
-      }
+      err => { console.warn("Geolocation failed:", err); alert("Unable to get your location."); }
     );
-  } else {
-    alert("Geolocation not supported by this browser.");
-  }
+  } else alert("Geolocation not supported by this browser.");
 }
 
-// Navigation function (Google Maps link)
 function navigateTo(lat, lng) {
-  const url = `https://www.google.com
+  const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
