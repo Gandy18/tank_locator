@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tank Locator</title>
 
-  <!-- Replace YOUR_API_KEY below after you get your key -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOpJyK8swAted9mSXXqhSbd5uYuHogu2c" defer></script>
   <script src="app.js" defer></script>
 
@@ -29,8 +28,10 @@
 <body>
   <div class="controls">
     <input id="searchInput" type="text" placeholder="Search by DP number or name"/>
-    <button id="searchBtn">Search</button>
-    <button id="resetBtn">Reset view</button>
+    <button id="searchBtn"
+      style="padding:8px 12px; border:1px solid #1a73e8; border-radius:6px; background:#1a73e8; color:#fff; cursor:pointer;">
+      Search
+    </button>
     <small>Tap a heart to toggle details.</small>
   </div>
   <div id="map"></div>
