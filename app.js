@@ -141,7 +141,7 @@ function wireLocateMe() {
   const btn = document.createElement("button");
   btn.textContent = "Locate Me";
   btn.style.cssText = `
-    position:absolute; bottom:12px; left:12px; z-index:2;
+    position:absolute; bottom:100px; left:12px; z-index:2;
     padding:12px 16px; border:none; border-radius:8px;
     background:#1a73e8; color:#fff; font-size:1rem;
     font-weight:bold; cursor:pointer;
