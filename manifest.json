@@ -1,0 +1,21 @@
+{
+  "__comment": "This manifest.json defines how the Tank Locator app behaves when installed as a PWA. It sets the app name, icons, start URL, display mode, and theme colors so users can launch it fullscreen without the browser address bar.",
+  "name": "Tank Locator",
+  "short_name": "TankMap",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a73e8",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
