@@ -163,3 +163,17 @@ function locateUser() {
 
 function navigateTo(lat, lng) {
   const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
+function zoomTo(lat, lng) {
+  map.setCenter({ lat, lng });
+  map.setZoom(18);
+}
+
+function escapeHTML(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+window.addEventListener("load", init);
