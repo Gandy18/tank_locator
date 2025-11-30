@@ -82,7 +82,11 @@ function addMarkers(points) {
         <div style="font-family: system-ui; line-height:1.4">
           <strong>${escapeHTML(point.dp_name || "Unknown")}</strong><br/>
           <span>DP#: ${escapeHTML(point.dp_number || "N/A")}</span><br/>
-          <small>Lat: ${point.latitude.toFixed(6)}, Lng: ${point.longitude.toFixed(6)}</small>
+          <small>Lat: ${point.latitude.toFixed(6)}, Lng: ${point.longitude.toFixed(6)}</small><br/>
+          <button onclick="navigateTo(${point.latitude}, ${point.longitude})"
+            style="margin-top:6px; padding:6px 10px; border:1px solid #ccc; border-radius:4px; background:#f6f6f6; cursor:pointer;">
+            Navigate to…
+          </button>
         </div>
       `
     });
@@ -215,6 +219,13 @@ function locateUser() {
   } else {
     alert("Geolocation not supported by this browser.");
   }
+}
+
+// Navigate to function
+function navigateTo(lat, lng) {
+  // Google Maps universal navigation link
+  const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+  window.open(url, "_blank");
 }
 
 // Basic HTML escape
