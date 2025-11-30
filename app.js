@@ -5,9 +5,9 @@ let map;
 let markers = [];
 let openInfoWindow = null;
 
-function heartIcon() {
+function calorIcon() {
   return {
-    url: "assets/heart.png",
+    url: "assets/calor.png",
     scaledSize: new google.maps.Size(32, 32),
     anchor: new google.maps.Point(16, 16)
   };
@@ -58,7 +58,7 @@ function addMarkers(points) {
       position: { lat: point.latitude, lng: point.longitude },
       map,
       title: point.dp_name || point.dp_number,
-      icon: heartIcon()
+      icon: calorIcon()
     });
 
     const infoWindow = new google.maps.InfoWindow({
