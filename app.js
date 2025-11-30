@@ -155,18 +155,27 @@ function wireSearch(points) {
   });
 }
 
-// Locate Me button (always visible)
+// Locate Me button (blue, always visible)
 function wireLocateMe() {
   const btn = document.createElement("button");
   btn.textContent = "Locate Me";
   btn.style.cssText = `
     position:absolute; bottom:12px; left:12px; z-index:2;
-    padding:8px 12px; border:1px solid #ccc; border-radius:6px;
-    background:#f6f6f6; cursor:pointer; font-family:system-ui;
+    padding:8px 12px; border:1px solid #1a73e8; border-radius:6px;
+    background:#1a73e8; color:#fff; cursor:pointer; font-family:system-ui;
   `;
   document.body.appendChild(btn);
 
-  btn.addEventListener("click", () => locateUser());
+  btn.addEventListener("click", () => {
+    const streetView = map.getStreetView();
+    if (streetView.getVisible()) {
+      // If Street View is active, reload to default view
+      location.reload();
+    } else {
+      // Otherwise, locate user
+      locateUser();
+    }
+  });
 }
 
 // Centre on current location with ~30 mile radius
