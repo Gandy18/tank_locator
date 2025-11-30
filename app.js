@@ -34,7 +34,6 @@ async function init() {
   addMarkers(points);
 
   wireSearch(points);
-  wireReset();
   wireLocateMe();
 
   // Try to centre on current location at startup
@@ -144,27 +143,6 @@ function wireSearch(points) {
       m.infoWindow.open(map, m.marker);
       openInfoWindow = m.infoWindow;
     }
-  });
-}
-
-// Reset view to default centre/zoom (always visible)
-function wireReset() {
-  const btn = document.createElement("button");
-  btn.textContent = "Reset View";
-  btn.style.cssText = `
-    position:absolute; bottom:12px; right:12px; z-index:2;
-    padding:8px 12px; border:1px solid #ccc; border-radius:6px;
-    background:#f6f6f6; cursor:pointer; font-family:system-ui;
-  `;
-  document.body.appendChild(btn);
-
-  btn.addEventListener("click", () => {
-    if (openInfoWindow) { 
-      openInfoWindow.close(); 
-      openInfoWindow = null; 
-    }
-    map.setCenter(DEFAULT_CENTER);
-    map.setZoom(DEFAULT_ZOOM);
   });
 }
 
