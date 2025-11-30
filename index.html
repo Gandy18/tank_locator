@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Delivery Points Map</title>
+  <style>
+    #map { height: 100vh; width: 100%; }
+    #searchBar {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 2;
+      background: #fff;
+      padding: 6px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      font-family: system-ui;
+    }
+    #searchInput { padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
+    #searchBtn {
+      padding: 6px 10px; border: 2px solid #fff; border-radius: 6px;
+      background: #1a73e8; color: #fff; cursor: pointer; font-family: system-ui;
+      font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+  </style>
+</head>
+<body>
+  <div id="searchBar">
+    <input id="searchInput" type="text" placeholder="Search by DP no. or name" />
+    <button id="searchBtn">Search</button>
+  </div>
+  <div id="map"></div>
+
+  <!-- Google Maps API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOpJyK8swAted9mSXXqhSbd5uYuHogu2c"></script>
+  <!-- App logic -->
+  <script src="app.js"></script>
+</body>
+</html>
