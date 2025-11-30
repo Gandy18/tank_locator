@@ -219,9 +219,8 @@ function locateUser() {
 
 // Android-friendly navigation function
 function navigateTo(lat, lng) {
-  // Use a geo URI instead of Google Maps API link
-  const url = `geo:${lat},${lng}?q=${lat},${lng}`;
-  window.location.href = url;
+  const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+  window.open(url, "_blank");
 }
 
 // Zoom In helper
