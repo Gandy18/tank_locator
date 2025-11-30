@@ -62,15 +62,16 @@ async function fetchPoints() {
   }
 }
 
-// Add markers with toggleable InfoWindows
+// Add markers with clustering
 function addMarkers(points) {
-  markers.forEach(m => m.setMap(null));
+  markers.forEach(m => m.marker.setMap(null));
   markers = [];
+
+  const markerObjects = [];
 
   points.forEach(point => {
     const marker = new google.maps.Marker({
       position: { lat: point.latitude, lng: point.longitude },
-      map,
       title: point.dp_name || point.dp_number,
       icon: heartIcon()
     });
@@ -92,18 +93,10 @@ function addMarkers(points) {
       `
     });
 
-    let isOpen = false;
     marker.addListener("click", () => {
-      if (isOpen) {
-        infoWindow.close();
-        isOpen = false;
-        openInfoWindow = null;
-      } else {
-        if (openInfoWindow) openInfoWindow.close();
-        infoWindow.open(map, marker);
-        isOpen = true;
-        openInfoWindow = infoWindow;
-      }
+      if (openInfoWindow) openInfoWindow.close();
+      infoWindow.open(map, marker);
+      openInfoWindow = infoWindow;
     });
 
     // Double‑click to open Street View directly
@@ -114,20 +107,18 @@ function addMarkers(points) {
       streetView.setVisible(true);
     });
 
+    markerObjects.push(marker);
     markers.push({ marker, infoWindow, point });
   });
+
+  // Create the clusterer
+  new markerClusterer.MarkerClusterer({ map, markers: markerObjects });
 }
 
 // Simple search by dp_number or dp_name
 function wireSearch(points) {
   const input = document.getElementById("searchInput");
   const btn = document.getElementById("searchBtn");
-
-  // Style search button blue
-  btn.style.cssText = `
-    padding:8px 12px; border:1px solid #1a73e8; border-radius:6px;
-    background:#1a73e8; color:#fff; cursor:pointer; font-family:system-ui;
-  `;
 
   btn.addEventListener("click", () => {
     const q = input.value.trim().toLowerCase();
@@ -213,29 +204,5 @@ function locateUser() {
       }
     );
   } else {
-    alert("Geolocation not supported by this browser.");
-  }
-}
-
-// Android-friendly navigation function
-function navigateTo(lat, lng) {
-  const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-  window.open(url, "_blank");
-}
-
-// Zoom In helper
-function zoomTo(lat, lng) {
-  map.setCenter({ lat, lng });
-  map.setZoom(18); // adjust zoom level as needed
-}
-
-// Basic HTML escape
-function escapeHTML(str) {
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
-
-// Start
-window.addEventListener("load", init);
+    alert("Geolocation
+          
