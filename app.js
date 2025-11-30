@@ -155,14 +155,17 @@ function wireSearch(points) {
   });
 }
 
-// Locate Me button (blue, always visible)
+// Locate Me button (blue with white border, always visible)
 function wireLocateMe() {
   const btn = document.createElement("button");
   btn.textContent = "Locate Me";
   btn.style.cssText = `
     position:absolute; bottom:12px; left:12px; z-index:2;
-    padding:8px 12px; border:1px solid #1a73e8; border-radius:6px;
+    padding:8px 12px; border:2px solid #fff; border-radius:6px;
     background:#1a73e8; color:#fff; cursor:pointer; font-family:system-ui;
+    font-weight:bold;
+    box-shadow:0 2px 6px rgba(0,0,0,0.4);
+    text-shadow:0 1px 2px rgba(0,0,0,0.6);
   `;
   document.body.appendChild(btn);
 
