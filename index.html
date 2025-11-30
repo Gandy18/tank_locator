@@ -2,38 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tank Locator</title>
-
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOpJyK8swAted9mSXXqhSbd5uYuHogu2c" defer></script>
-  <script src="app.js" defer></script>
-
+  <title>Delivery Points Map</title>
   <style>
-    html, body { height: 100%; margin: 0; }
-    #map { height: 100%; width: 100%; }
-    .controls {
-      position: absolute; top: 12px; left: 12px; z-index: 2;
-      background: rgba(255,255,255,0.95); border: 1px solid #ddd; border-radius: 8px;
-      padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-family: system-ui, sans-serif;
+    /* Basic map styling */
+    #map {
+      height: 100vh;
+      width: 100%;
     }
-    .controls input {
-      width: 220px; padding: 8px; border: 1px solid #ccc; border-radius: 6px;
+    /* Search bar styling */
+    #searchBar {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      background: #fff;
+      padding: 6px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      font-family: system-ui;
     }
-    .controls button {
-      margin-left: 8px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; background: #f6f6f6; cursor: pointer;
+    #searchInput {
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
-    .controls small { display:block; margin-top:6px; color:#666; }
+    #searchBtn {
+      padding: 6px 10px;
+      border: 2px solid #fff;
+      border-radius: 6px;
+      background: #1a73e8;
+      color: #fff;
+      cursor: pointer;
+      font-family: system-ui;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
   </style>
 </head>
 <body>
-  <div class="controls">
-    <input id="searchInput" type="text" placeholder="Search by DP number or name"/>
-    <button id="searchBtn"
-      style="padding:8px 12px; border:1px solid #1a73e8; border-radius:6px; background:#1a73e8; color:#fff; cursor:pointer;">
-      Search
-    </button>
-    <small>Tap a heart to toggle details.</small>
+  <!-- Search bar -->
+  <div id="searchBar">
+    <input id="searchInput" type="text" placeholder="Search by DP number or name" />
+    <button id="searchBtn">Search</button>
   </div>
+
+  <!-- Map container -->
   <div id="map"></div>
+
+  <!-- Google Maps API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+  <!-- MarkerClusterer library -->
+  <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+  <!-- App logic -->
+  <script src="app.js"></script>
 </body>
 </html>
