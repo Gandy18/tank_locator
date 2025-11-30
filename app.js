@@ -205,4 +205,23 @@ function locateUser() {
 
 // Navigation function (Google Maps link)
 function navigateTo(lat, lng) {
-  const url = `https://www.google.com/maps/dir/?api=1&
+  const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+  window.open(url, "_blank");
+}
+
+// Zoom In helper
+function zoomTo(lat, lng) {
+  map.setCenter({ lat, lng });
+  map.setZoom(18); // adjust zoom level as needed
+}
+
+// Basic HTML escape
+function escapeHTML(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// Start
+window.addEventListener("load", init);
