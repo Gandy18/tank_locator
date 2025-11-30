@@ -20,7 +20,7 @@ async function init() {
     mapTypeId: "hybrid",       // satellite imagery + labels
     streetViewControl: true,
     mapTypeControl: false,     // hide map/terrain toggle
-    fullscreenControl: false   // optional, cleaner on mobile
+    fullscreenControl: false   // cleaner on mobile
   });
 
   const points = await fetchPoints();
@@ -67,11 +67,11 @@ function addMarkers(points) {
           <strong style="font-size:1.2rem;">${escapeHTML(point.dp_name || "Unknown")}</strong><br/>
           <span style="font-size:1.1rem;">DP#: ${escapeHTML(point.dp_number || "N/A")}</span><br/>
           <button onclick="navigateTo(${point.latitude}, ${point.longitude})"
-            style="margin-top:6px; padding:8px 12px; border:1px solid #1a73e8; border-radius:4px; background:#1a73e8; color:#fff; cursor:pointer; min-width:44px; min-height:44px;">
+            style="margin-top:6px; padding:12px 16px; border:none; border-radius:8px; background:#1a73e8; color:#fff; font-size:1rem; font-weight:bold; cursor:pointer;">
             Navigate to…
           </button>
           <button onclick="zoomTo(${point.latitude}, ${point.longitude})"
-            style="margin-top:6px; margin-left:6px; padding:8px 12px; border:1px solid #34A853; border-radius:4px; background:#34A853; color:#fff; cursor:pointer; min-width:44px; min-height:44px;">
+            style="margin-top:6px; margin-left:6px; padding:12px 16px; border:none; border-radius:8px; background:#34A853; color:#fff; font-size:1rem; font-weight:bold; cursor:pointer;">
             Zoom In
           </button>
         </div>
@@ -130,7 +130,7 @@ function searchByPostcode(postcode) {
     if (status === "OK" && results[0]) {
       const loc = results[0].geometry.location;
       map.setCenter(loc);
-      map.setZoom(16); // zoom in close to the postcode area
+      map.setZoom(16);
     } else {
       alert("Postcode not found. Please check and try again.");
     }
@@ -142,11 +142,9 @@ function wireLocateMe() {
   btn.textContent = "Locate Me";
   btn.style.cssText = `
     position:absolute; bottom:12px; left:12px; z-index:2;
-    padding:10px 14px; border:2px solid #fff; border-radius:6px;
-    background:#1a73e8; color:#fff; cursor:pointer; font-family:system-ui;
-    font-weight:bold; min-width:44px; min-height:44px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.4);
-    text-shadow:0 1px 2px rgba(0,0,0,0.6);
+    padding:12px 16px; border:none; border-radius:8px;
+    background:#1a73e8; color:#fff; font-size:1rem;
+    font-weight:bold; cursor:pointer;
   `;
   document.body.appendChild(btn);
   btn.addEventListener("click", () => {
@@ -169,8 +167,11 @@ function locateUser() {
           position: loc, map,
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
-            scale: 12, fillColor: "#00f", fillOpacity: 0.8,
-            strokeColor: "#fff", strokeWeight: 2
+            scale: 12, // larger blue dot
+            fillColor: "#00f",
+            fillOpacity: 0.8,
+            strokeColor: "#fff",
+            strokeWeight: 2
           },
           title: "Your Location"
         });
@@ -189,25 +190,25 @@ function locateUser() {
   }
 }
 
-// Android-friendly navigation function
 function navigateTo(lat, lng) {
   const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
   window.open(url, "_blank");
 }
 
-// Zoom In helper
 function zoomTo(lat, lng) {
   map.setCenter({ lat, lng });
-  map.setZoom(21); // zoom level on clicking "Zoom In"
+  map.setZoom(21); // max zoom level
 }
 
-// Basic HTML escape
 function escapeHTML(str) {
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  return String(str).replace(/[&<>'"]/g, tag => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "'": "&#39;",
+    '"': "&quot;"
+  }[tag]));
 }
 
-// Start
+// Initialise map when page loads
 window.addEventListener("load", init);

@@ -4,73 +4,70 @@
   <meta charset="UTF-8" />
   <title>Delivery Points Map</title>
   <style>
-    /* Reset margins and prevent scrollbars */
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       width: 100%;
-      overflow: hidden; /* ensures no scrollbars */
+      overflow: hidden;
     }
 
-    /* Map fills the visible viewport */
     #map {
-      height: 100dvh; /* dynamic viewport height */
-      width: 100dvw;  /* dynamic viewport width */
+      height: 100dvh;
+      width: 100dvw;
     }
 
-    /* Search bar fixed top-left */
+    /* Full-width search bar across top */
     #searchBar {
       position: absolute;
-      top: 12px;
-      left: 12px;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 2;
+      display: flex;
+      align-items: center;
+      padding: 12px;
       background: #fff;
-      padding: 6px;
-      border-radius: 6px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
       font-family: system-ui;
     }
 
-    /* Search input styling */
+    /* Adaptive input field */
     #searchInput {
-      padding: 6px;
+      flex: 1;
+      padding: 12px;
+      font-size: 1rem;
       border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 260px;   /* wider field so placeholder fits */
-      max-width: 70vw; /* responsive cap on smaller screens */
-}
+      border-radius: 8px;
+      margin-right: 8px;
+      width: 260px;
+      max-width: 70vw;
+    }
 
-    /* Search button styling (touch-friendly) */
+    /* Google-style button */
     #searchBtn {
-      padding: 8px 12px;
-      border: 2px solid #fff;
-      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
       background: #1a73e8;
       color: #fff;
-      cursor: pointer;
-      font-family: system-ui;
       font-weight: bold;
-      min-width: 44px;   /* recommended tap target size */
+      cursor: pointer;
+      min-width: 44px;
       min-height: 44px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
     }
   </style>
 </head>
 <body>
-  <!-- Search bar -->
   <div id="searchBar">
     <input id="searchInput" type="text" placeholder="Search by DP number, name or postcode" />
     <button id="searchBtn">Search</button>
   </div>
 
-  <!-- Map container -->
   <div id="map"></div>
 
-  <!-- Google Maps API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOpJyK8swAted9mSXXqhSbd5uYuHogu2c"></script>
-  <!-- App logic -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
   <script src="app.js"></script>
 </body>
 </html>
