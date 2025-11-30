@@ -80,7 +80,6 @@ function addMarkers(points) {
         <div style="font-family: system-ui; line-height:1.4">
           <strong>${escapeHTML(point.dp_name || "Unknown")}</strong><br/>
           <span>DP#: ${escapeHTML(point.dp_number || "N/A")}</span><br/>
-          <small>Lat: ${point.latitude.toFixed(6)}, Lng: ${point.longitude.toFixed(6)}</small><br/>
           <button onclick="navigateTo(${point.latitude}, ${point.longitude})"
             style="margin-top:6px; padding:6px 10px; border:1px solid #1a73e8; border-radius:4px; background:#1a73e8; color:#fff; cursor:pointer;">
             Navigate to…
