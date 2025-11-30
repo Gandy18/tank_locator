@@ -84,6 +84,10 @@ function addMarkers(points) {
             style="margin-top:6px; padding:6px 10px; border:1px solid #1a73e8; border-radius:4px; background:#1a73e8; color:#fff; cursor:pointer;">
             Navigate to…
           </button>
+          <button onclick="zoomTo(${point.latitude}, ${point.longitude})"
+            style="margin-top:6px; margin-left:6px; padding:6px 10px; border:1px solid #34A853; border-radius:4px; background:#34A853; color:#fff; cursor:pointer;">
+            Zoom In
+          </button>
         </div>
       `
     });
@@ -102,7 +106,7 @@ function addMarkers(points) {
       }
     });
 
-    // Optional: double‑click to open Street View directly
+    // Double‑click to open Street View directly
     marker.addListener("dblclick", () => {
       const streetView = map.getStreetView();
       streetView.setPosition({ lat: point.latitude, lng: point.longitude });
@@ -118,6 +122,12 @@ function addMarkers(points) {
 function wireSearch(points) {
   const input = document.getElementById("searchInput");
   const btn = document.getElementById("searchBtn");
+
+  // Style search button blue
+  btn.style.cssText = `
+    padding:8px 12px; border:1px solid #1a73e8; border-radius:6px;
+    background:#1a73e8; color:#fff; cursor:pointer; font-family:system-ui;
+  `;
 
   btn.addEventListener("click", () => {
     const q = input.value.trim().toLowerCase();
@@ -199,6 +209,12 @@ function locateUser() {
 function navigateTo(lat, lng) {
   const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
   window.open(url, "_blank");
+}
+
+// Zoom In helper
+function zoomTo(lat, lng) {
+  map.setCenter({ lat, lng });
+  map.setZoom(18); // adjust zoom level as needed
 }
 
 // Basic HTML escape
