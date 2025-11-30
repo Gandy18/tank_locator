@@ -21,8 +21,8 @@ async function init() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: DEFAULT_CENTER,
     zoom: DEFAULT_ZOOM,
-    mapTypeId: "satellite",   // 👈 satellite view
-    streetViewControl: true   // 👈 pegman enabled
+    mapTypeId: "satellite",   // satellite view
+    streetViewControl: true   // pegman enabled
   });
 
   const points = await fetchPoints();
@@ -32,11 +32,10 @@ async function init() {
   }
 
   addMarkers(points);
-  fitToMarkers();
 
   wireSearch(points);
   wireReset();
-  wireLocateMe(); // 👈 add Locate Me button
+  wireLocateMe();
 
   // Try to centre on current location at startup
   locateUser();
@@ -77,7 +76,7 @@ function addMarkers(points) {
       icon: heartIcon()
     });
 
-     const infoWindow = new google.maps.InfoWindow({
+    const infoWindow = new google.maps.InfoWindow({
       content: `
         <div style="font-family: system-ui; line-height:1.4">
           <strong>${escapeHTML(point.dp_name || "Unknown")}</strong><br/>
@@ -93,7 +92,6 @@ function addMarkers(points) {
 
     let isOpen = false;
     marker.addListener("click", () => {
-      // Toggle behavior
       if (isOpen) {
         infoWindow.close();
         isOpen = false;
@@ -115,18 +113,6 @@ function addMarkers(points) {
     });
 
     markers.push({ marker, infoWindow, point });
-  });
-}
-
-// Fit map bounds to current markers
-function fitToMarkers() {
-  if (markers.length === 0) return;
-  const bounds = new google.maps.LatLngBounds();
-  markers.forEach(({ marker }) => bounds.extend(marker.getPosition()));
-  map.fitBounds(bounds);
-
-  google.maps.event.addListenerOnce(map, "idle", () => {
-    if (map.getZoom() > 18) map.setZoom(16);
   });
 }
 
@@ -161,16 +147,28 @@ function wireSearch(points) {
   });
 }
 
-// Reset view to show all
+// Reset view to default centre/zoom (always visible)
 function wireReset() {
-  const btn = document.getElementById("resetBtn");
+  const btn = document.createElement("button");
+  btn.textContent = "Reset View";
+  btn.style.cssText = `
+    position:absolute; bottom:12px; right:12px; z-index:2;
+    padding:8px 12px; border:1px solid #ccc; border-radius:6px;
+    background:#f6f6f6; cursor:pointer; font-family:system-ui;
+  `;
+  document.body.appendChild(btn);
+
   btn.addEventListener("click", () => {
-    if (openInfoWindow) { openInfoWindow.close(); openInfoWindow = null; }
-    fitToMarkers();
+    if (openInfoWindow) { 
+      openInfoWindow.close(); 
+      openInfoWindow = null; 
+    }
+    map.setCenter(DEFAULT_CENTER);
+    map.setZoom(DEFAULT_ZOOM);
   });
 }
 
-// Locate Me button
+// Locate Me button (always visible)
 function wireLocateMe() {
   const btn = document.createElement("button");
   btn.textContent = "Locate Me";
@@ -196,7 +194,6 @@ function locateUser() {
         });
         map.fitBounds(circle.getBounds());
 
-        // Add a temporary marker for user location
         new google.maps.Marker({
           position: loc,
           map,
@@ -221,9 +218,8 @@ function locateUser() {
   }
 }
 
-// Navigate to function
+// Android-friendly navigation function
 function navigateTo(lat, lng) {
-  // Google Maps universal navigation link
   const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
   window.open(url, "_blank");
 }
