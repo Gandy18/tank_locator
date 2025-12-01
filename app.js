@@ -21,7 +21,7 @@ async function init() {
     streetViewControl: true,
     mapTypeControl: false,     // hide map/terrain toggle
     fullscreenControl: false,  // hide fullscreen button
-    zoomControl: true          // keep zoom controls
+    zoomControl: false,        // hide zoom controls
   });
 
   const points = await fetchPoints();
