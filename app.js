@@ -14,18 +14,21 @@ function calorIcon() {
 }
 
 async function init() {
-  map = new google.maps.Map(document.getElementById("map"), {
+    map = new google.maps.Map(document.getElementById("map"), {
     center: DEFAULT_CENTER,
     zoom: DEFAULT_ZOOM,
+    disableDefaultUI: true,
     mapTypeId: "hybrid",
     streetViewControl: true,
-    mapTypeControl: false,
-    fullscreenControl: false,
-    zoomControl: false,   // removed zoom controls
-    panControl: false,     // removed camera/pan controls
-    disableDefaultUI: true,
-    streetViewZoomControl: false
   });
+
+  // Disable controls on Street View too
+  const panorama = map.getStreetView();
+  panorama.setOptions({
+    zoomControl: false,
+    panControl: false,
+  });
+
 
   const points = await fetchPoints();
   if (!points || points.length === 0) return;
@@ -144,16 +147,16 @@ function wireLocateMe() {
   const btn = document.createElement("div");
   btn.style.cssText = `
     position: absolute;
-    bottom: 72px;
-    right: 12px;
+    bottom: 75px;
+    right: 11px;
     z-index: 9999;
     background: #fff;
     border: 2px solid #fff;
     border-radius: 50%;
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
