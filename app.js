@@ -29,7 +29,6 @@ async function init() {
     panControl: false,
   });
 
-
   const points = await fetchPoints();
   if (!points || points.length === 0) return;
 
@@ -71,14 +70,32 @@ function addMarkers(points) {
     const infoWindow = new google.maps.InfoWindow({
       content: `
         <div style="font-family: system-ui; line-height:1.4">
-          <strong style="font-size:1.2rem;">${escapeHTML(point.dp_name || "Unknown")}</strong><br/>
-          <span style="font-size:1.1rem;">DP#: ${escapeHTML(point.dp_number || "N/A")}</span><br/>
+          <strong style="font-size:clamp(1rem, 2.5vw, 1.3rem);">
+            ${escapeHTML(point.dp_name || "Unknown")}
+          </strong><br/>
+          <span style="font-size:clamp(0.9rem, 2.5vw, 1.1rem);">
+            DP#: ${escapeHTML(point.dp_number || "N/A")}
+          </span><br/>
           <button onclick="navigateTo(${point.latitude}, ${point.longitude})"
-            style="margin-top:6px; padding:12px 16px; border:none; border-radius:8px; background:#1a73e8; color:#fff; font-size:1rem; font-weight:bold; cursor:pointer;">
+            style="margin-top:6px;
+                   padding:clamp(10px,2vw,14px) clamp(12px,3vw,18px);
+                   border:none;
+                   border-radius:clamp(6px,2vw,10px);
+                   background:#1a73e8; color:#fff;
+                   font-size:clamp(0.9rem,2.5vw,1.2rem);
+                   font-weight:bold; cursor:pointer;
+                   min-width:44px; min-height:44px;">
             Navigate to…
           </button>
           <button onclick="zoomTo(${point.latitude}, ${point.longitude})"
-            style="margin-top:6px; margin-left:6px; padding:12px 16px; border:none; border-radius:8px; background:#34A853; color:#fff; font-size:1rem; font-weight:bold; cursor:pointer;">
+            style="margin-top:6px; margin-left:6px;
+                   padding:clamp(10px,2vw,14px) clamp(12px,3vw,18px);
+                   border:none;
+                   border-radius:clamp(6px,2vw,10px);
+                   background:#34A853; color:#fff;
+                   font-size:clamp(0.9rem,2.5vw,1.2rem);
+                   font-weight:bold; cursor:pointer;
+                   min-width:44px; min-height:44px;">
             Zoom In
           </button>
         </div>
