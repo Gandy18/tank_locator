@@ -22,7 +22,7 @@ async function init() {
     mapTypeControl: false,     // hide map/terrain toggle
     fullscreenControl: false,  // hide fullscreen button
     zoomControl: false,        // hide zoom controls
-    controls: false,            // hide default controls
+    disableDefaultUI: true,    // hide default controls
   });
 
   const points = await fetchPoints();
