@@ -5,9 +5,9 @@ let map;
 let markers = [];
 let openInfoWindow = null;
 
-function calorIcon() {
+function heartIcon() {
   return {
-    url: "assets/calor.png",
+    url: "assets/heart.png",
     scaledSize: new google.maps.Size(32, 32),
     anchor: new google.maps.Point(16, 16)
   };
@@ -20,7 +20,8 @@ async function init() {
     mapTypeId: "hybrid",       // satellite imagery + labels
     streetViewControl: true,
     mapTypeControl: false,     // hide map/terrain toggle
-    fullscreenControl: false   // cleaner on mobile
+    fullscreenControl: false,  // hide fullscreen button
+    zoomControl: true          // keep zoom controls
   });
 
   const points = await fetchPoints();
@@ -58,7 +59,7 @@ function addMarkers(points) {
       position: { lat: point.latitude, lng: point.longitude },
       map,
       title: point.dp_name || point.dp_number,
-      icon: calorIcon()
+      icon: heartIcon()
     });
 
     const infoWindow = new google.maps.InfoWindow({
@@ -137,16 +138,35 @@ function searchByPostcode(postcode) {
   });
 }
 
+// New Google-style Locate Me control
 function wireLocateMe() {
-  const btn = document.createElement("button");
-  btn.textContent = "Locate Me";
+  const btn = document.createElement("div");
   btn.style.cssText = `
-    position:absolute; bottom:25px; left:12px; z-index:2;
-    padding:12px 16px; border:none; border-radius:8px;
-    background:#1a73e8; color:#fff; font-size:1rem;
-    font-weight:bold; cursor:pointer;
+    background: #fff;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    cursor: pointer;
+    margin: 10px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   `;
-  document.body.appendChild(btn);
+
+  const dot = document.createElement("div");
+  dot.style.cssText = `
+    width: 12px;
+    height: 12px;
+    background: #1a73e8;
+    border-radius: 50%;
+  `;
+  btn.appendChild(dot);
+
+  // Add to map controls (bottom right, above Pegman)
+  map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btn);
+
   btn.addEventListener("click", () => {
     const streetView = map.getStreetView();
     if (streetView.getVisible()) location.reload();
