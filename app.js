@@ -5,9 +5,9 @@ let map;
 let markers = [];
 let openInfoWindow = null;
 
-function calorIcon() {
+function heartIcon() {
   return {
-    url: "assets/calor.png",
+    url: "assets/heart.png",
     scaledSize: new google.maps.Size(32, 32),
     anchor: new google.maps.Point(16, 16)
   };
@@ -17,12 +17,12 @@ async function init() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: DEFAULT_CENTER,
     zoom: DEFAULT_ZOOM,
-    mapTypeId: "hybrid",       // satellite imagery + labels
+    mapTypeId: "hybrid",
     streetViewControl: true,
-    mapTypeControl: false,     // hide map/terrain toggle
-    fullscreenControl: false,  // hide fullscreen button
-    zoomControl: false,        // hide zoom controls
-    disableDefaultUI: true,    // hide default controls
+    mapTypeControl: false,
+    fullscreenControl: false,
+    zoomControl: false,   // removed zoom controls
+    panControl: false     // removed camera/pan controls
   });
 
   const points = await fetchPoints();
@@ -60,7 +60,7 @@ function addMarkers(points) {
       position: { lat: point.latitude, lng: point.longitude },
       map,
       title: point.dp_name || point.dp_number,
-      icon: calorIcon()
+      icon: heartIcon()
     });
 
     const infoWindow = new google.maps.InfoWindow({
@@ -104,7 +104,6 @@ function wireSearch(points) {
     const q = input.value.trim().toLowerCase();
     if (!q) return;
 
-    // First try DP number or name
     const match = points.find(p =>
       (p.dp_number && p.dp_number.toLowerCase().includes(q)) ||
       (p.dp_name && p.dp_name.toLowerCase().includes(q))
@@ -120,7 +119,6 @@ function wireSearch(points) {
         openInfoWindow = m.infoWindow;
       }
     } else {
-      // If no DP match, try postcode lookup
       searchByPostcode(q);
     }
   });
@@ -139,16 +137,19 @@ function searchByPostcode(postcode) {
   });
 }
 
-// New Google-style Locate Me control
+// Google-style Locate Me button, always visible
 function wireLocateMe() {
   const btn = document.createElement("div");
   btn.style.cssText = `
+    position: absolute;
+    bottom: 72px;
+    right: 12px;
+    z-index: 9999;
     background: #fff;
     border: 2px solid #fff;
     border-radius: 50%;
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     cursor: pointer;
-    margin: 10px;
     width: 40px;
     height: 40px;
     display: flex;
@@ -165,13 +166,18 @@ function wireLocateMe() {
   `;
   btn.appendChild(dot);
 
-  // Add to map controls (bottom right, above Pegman)
-  map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btn);
+  document.body.appendChild(btn);
 
   btn.addEventListener("click", () => {
     const streetView = map.getStreetView();
-    if (streetView.getVisible()) location.reload();
-    else locateUser();
+    if (streetView.getVisible()) {
+      // Exit Street View back to map
+      streetView.setVisible(false);
+      map.setCenter(DEFAULT_CENTER);
+      map.setZoom(DEFAULT_ZOOM);
+    } else {
+      locateUser();
+    }
   });
 }
 
@@ -188,7 +194,7 @@ function locateUser() {
           position: loc, map,
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
-            scale: 12, // larger blue dot
+            scale: 12,
             fillColor: "#00f",
             fillOpacity: 0.8,
             strokeColor: "#fff",
@@ -218,7 +224,7 @@ function navigateTo(lat, lng) {
 
 function zoomTo(lat, lng) {
   map.setCenter({ lat, lng });
-  map.setZoom(21); // max zoom level
+  map.setZoom(21);
 }
 
 function escapeHTML(str) {
@@ -231,5 +237,4 @@ function escapeHTML(str) {
   }[tag]));
 }
 
-// Initialise map when page loads
 window.addEventListener("load", init);
