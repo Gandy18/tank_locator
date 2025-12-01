@@ -24,6 +24,7 @@ async function init() {
     zoomControl: false,   // removed zoom controls
     panControl: false,     // removed camera/pan controls
     disableDefaultUI: true,
+    streetViewZoomControl: false
   });
 
   const points = await fetchPoints();
