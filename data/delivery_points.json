@@ -23,16 +23,57 @@
     "latitude": 51.104494,
     "longitude": -2.318481
   },
-    {
-    "dp_number": "65165641",
-    "dp_name": "Stourhead Stourton",
-    "latitude": 51.103706,
-    "longitude": -2.317694
-  },
   {
     "dp_number": "8500014660",
     "dp_name": "Lower Mere Park Farm",
     "latitude": 51.066363,
     "longitude": -2.235005
+  },
+  {
+    "dp_number": "64035719",
+    "dp_name": "Myrtle Cottage",
+    "latitude": 50.903183,
+    "longitude": -1.504652,
+    "notes": "Reverse in from main road"
+  },
+  {
+    "dp_number": "88301019",
+    "dp_name": "Longdown Activity Farm",
+    "latitude": 50.894578,
+    "longitude": -1.505900
+  },
+  {
+    "dp_number": "2335444",
+    "dp_name": "Beaulieu Road Hotel",
+    "latitude": 50.854106,
+    "longitude": -1.503258,
+    "notes": "OK to drive in and turn round"
+  },
+  {
+    "dp_number": "2334611",
+    "dp_name": "Drokes Lodge",
+    "latitude": 50.788539,
+    "longitude": -1.423646
+  },
+  {
+    "dp_number": "2313990",
+    "dp_name": "North Lodge",
+    "latitude": 50.767085,
+    "longitude": -1.503162,
+    "notes": "Deliver from main road"
+  },
+  {
+    "dp_number": "84833906",
+    "dp_name": "Hill House School",
+    "latitude": 50.782816,
+    "longitude": -1.553592,
+    "notes": "Reverse up staff entrance"
+  },
+  {
+    "dp_number": "31224391",
+    "dp_name": "Gatewood View",
+    "latitude": 50.816064,
+    "longitude": -1.375934,
+    "notes": "Tight access through gates, Beware of dwarf wall, 7 Tonne Only"
   }
 ]

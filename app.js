@@ -47,7 +47,8 @@ async function fetchPoints() {
       dp_number: String(p.dp_number || "").trim(),
       dp_name: String(p.dp_name || "").trim(),
       latitude: Number(p.latitude),
-      longitude: Number(p.longitude)
+      longitude: Number(p.longitude),
+      notes: p.notes ? String(p.notes).trim() : ""
     })).filter(p => !isNaN(p.latitude) && !isNaN(p.longitude));
   } catch (e) {
     console.error(e);
@@ -76,31 +77,34 @@ function addMarkers(points) {
           <span style="font-size:clamp(0.9rem, 2.5vw, 1.1rem);">
             DP#: ${escapeHTML(point.dp_number || "N/A")}
           </span><br/>
+          ${point.notes ? `
+            <div style="margin-top:6px; font-size:clamp(0.85rem, 2.2vw, 1rem); color:#555;">
+              <em>Notes:</em> ${escapeHTML(point.notes)}
+            </div>` : ""}
           <button onclick="navigateTo(${point.latitude}, ${point.longitude})"
             style="margin-top:6px;
-                   padding:clamp(10px,2vw,14px) clamp(12px,3vw,18px);
-                   border:none;
-                   border-radius:clamp(6px,2vw,10px);
-                   background:#1a73e8; color:#fff;
-                   font-size:clamp(0.9rem,2.5vw,1.2rem);
-                   font-weight:bold; cursor:pointer;
-                   min-width:44px; min-height:44px;">
+                  padding:clamp(10px,2vw,14px) clamp(12px,3vw,18px);
+                  border:none; border-radius:clamp(6px,2vw,10px);
+                  background:#1a73e8; color:#fff;
+                  font-size:clamp(0.9rem,2.5vw,1.2rem);
+                  font-weight:bold; cursor:pointer;
+                  min-width:44px; min-height:44px;">
             Navigate to…
           </button>
           <button onclick="zoomTo(${point.latitude}, ${point.longitude})"
             style="margin-top:6px; margin-left:6px;
-                   padding:clamp(10px,2vw,14px) clamp(12px,3vw,18px);
-                   border:none;
-                   border-radius:clamp(6px,2vw,10px);
-                   background:#34A853; color:#fff;
-                   font-size:clamp(0.9rem,2.5vw,1.2rem);
-                   font-weight:bold; cursor:pointer;
-                   min-width:44px; min-height:44px;">
+                  padding:clamp(10px,2vw,14px) clamp(12px,3vw,18px);
+                  border:none; border-radius:clamp(6px,2vw,10px);
+                  background:#34A853; color:#fff;
+                  font-size:clamp(0.9rem,2.5vw,1.2rem);
+                  font-weight:bold; cursor:pointer;
+                  min-width:44px; min-height:44px;">
             Zoom In
           </button>
         </div>
       `
     });
+
 
     marker.addListener("click", () => {
       if (openInfoWindow) openInfoWindow.close();
